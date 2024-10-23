@@ -1,13 +1,47 @@
 # my-website
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Connor's Website</title>
-</head>
-<body>
-    <h1>Hello, Connor!</h1>
-    <p>Welcome to my website.</p>
-</body>
-</html>
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up display
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption('Moving Worm')
+
+# Colors
+white = (255, 255, 255)
+green = (0, 255, 0)
+
+# Worm settings
+worm_length = 10  # Number of segments in the worm
+worm_segments = [(width // 2, height // 2)] * worm_length  # Initial position
+worm_speed = 10  # Speed of movement
+
+# Main loop
+clock = pygame.time.Clock()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Get mouse position
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+
+    # Update worm segments
+    worm_segments.insert(0, (mouse_x, mouse_y))  # Add new head
+    if len(worm_segments) > worm_length:
+        worm_segments.pop()  # Remove the tail
+
+    # Fill the screen with white
+    screen.fill(white)
+
+    # Draw the worm
+    for segment in worm_segments:
+        pygame.draw.circle(screen, green, segment, 5)
+
+    # Update the display
+    pygame.display.flip()
+    clock.tick(30)  # Set the frame rate
